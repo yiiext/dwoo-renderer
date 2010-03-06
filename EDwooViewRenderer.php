@@ -1,24 +1,14 @@
 <?php
 /**
- * Dwoo renderer for Yii
- *
- * Copy latest version of Dwoo (dwoo-x.x.x.tar\dwoo\) to vendors/Dwoo/.
- *
- * Add the following to your config file 'components' section:
- *
- * 'viewRenderer'=>array(
- *     'class'=>'application.extensions.Dwoo.CDwooViewRenderer',
- *     'fileExtension' => '.tpl',
- *     //'pluginsDir' => 'application.dwooPlugins',
- *  ),
+ * Dwoo view renderer
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
- * @link http://www.yiiframework.com/
+ * @link http://code.google.com/p/yiiext/
  * @link http://dwoo.org/
  *
- * @version 0.9
+ * @version 0.9.1
  */
-class CDwooViewRenderer extends CApplicationComponent implements IViewRenderer {
+class EDwooViewRenderer extends CApplicationComponent implements IViewRenderer {
     public $fileExtension='.tpl';
     public $filePermission=0755;
     public $pluginsDir = null;
@@ -84,10 +74,13 @@ class CDwooViewRenderer extends CApplicationComponent implements IViewRenderer {
 	public function renderFile($context,$sourceFile,$data,$return) {
         // current controller properties will be accessible as {this.property}
         $data['this'] = $context;
+        $data['Yii'] = Yii::app();
+        $data["TIME"] = sprintf('%0.5f',Yii::getLogger()->getExecutionTime());
+        $data["MEMORY"] = round(Yii::getLogger()->getMemoryUsage()/(1024*1024),2)." MB";
 
         // check if view file exists
         if(!is_file($sourceFile) || ($file=realpath($sourceFile))===false)
-            throw new CException(Yii::t('yii','View file "{file}" does not exist.', array('{file}'=>$sourceFile)));
+            throw new CException(Yii::t('yiiext','View file "{file}" does not exist.', array('{file}'=>$sourceFile)));
         
         //render
         return $this->dwoo->get($sourceFile, $data);
