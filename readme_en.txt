@@ -16,6 +16,7 @@ This extension allows you to use [Dwoo](http://dwoo.org/) templates in Yii.
 * Extract the release file under `protected/extensions`.
 * [Download](http://dwoo.org/download) and extract Dwoo (dwoo-x.x.x.tar\dwoo\) under `protected/vendors/Dwoo`.
 * Add the following to your config file 'components' section:
+
 ~~~
 [php]
 'viewRenderer'=>array(
